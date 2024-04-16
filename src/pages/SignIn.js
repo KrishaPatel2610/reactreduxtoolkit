@@ -1,11 +1,14 @@
 // pages/SignIn.js
+import Cookies from 'js-cookie';
 import '../index.css';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useSignInMutation } from '../services/api';
+import { useSignInMutation } from '../services/userApi';
 
 export const SignIn = () => {
+  const navigate = useNavigate();
+  const [signIn, { isLoading }] = useSignInMutation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,8 +17,6 @@ export const SignIn = () => {
     emailError: '',
     passwordError: '',
   });
-  const navigate = useNavigate();
-  const [signIn, { isLoading }] = useSignInMutation();
 
   const onHandleChange = (e) => {
     const { name, value } = e.target;
@@ -82,16 +83,18 @@ export const SignIn = () => {
     if (isEmailValid && isPasswordValid) {
       try {
         const result = await signIn(formData);
-        console.log('Tu bhi yaar', result);
-        const { data, error } = result;
-        if (data) {
+        const { data } = result;
+
+        if (data && data.data._id) {
+          Cookies.set('userID', data.data._id);
+        }
+        const token = data.data.accessToken;
+        if (data && token) {
+          Cookies.set('token', token);
           navigate('/');
           toast.success('Logged in successfully!');
-        } else if (error) {
-          toast.error(error.message || 'Failed to sign in.');
         }
       } catch (error) {
-        console.error('Sign In Error:', error);
         toast.error('Failed to sign in.');
       }
     }
@@ -125,6 +128,7 @@ export const SignIn = () => {
         <button className='submit' onClick={handleSignIn}>
           {isLoading ? '  Loading...' : 'Submit'}
         </button>
+
         <Link to='/sign-up' className='footer'>
           Register first!
         </Link>
@@ -132,66 +136,3 @@ export const SignIn = () => {
     </div>
   );
 };
-// import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { toast } from 'react-toastify';
-// import { useSignInMutation } from '../services/api';
-
-// export const SignIn = () => {
-//   const [formData, setFormData] = useState({
-//     email: '',
-//     password: '',
-//   });
-//   const [error, setError] = useState({
-//     emailError: '',
-//     passwordError: '',
-//   });
-//   const navigate = useNavigate();
-//   const [signIn, { isLoading }] = useSignInMutation();
-
-//   const onHandleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData({
-//       ...formData,
-//       [name]: value,
-//     });
-//   };
-
-//   const validateEmail = () => {
-//     // Validation logic remains the same
-//   };
-
-//   const validatePassword = () => {
-//     // Validation logic remains the same
-//   };
-
-//   const handleSignIn = async (e) => {
-//     e.preventDefault();
-//     const isEmailValid = validateEmail();
-//     const isPasswordValid = validatePassword();
-//     if (isEmailValid && isPasswordValid) {
-//       try {
-//         const result = await signIn(formData);
-//         const { data, error } = result;
-//         if (data) {
-//           // Assuming backend returns a token upon successful authentication
-//           // Store token in local storage or cookies
-//           localStorage.setItem('token', data.token); // Change 'token' to match your actual token key
-//           navigate('/');
-//           toast.success('Logged in successfully!');
-//         } else if (error) {
-//           toast.error(error.message || 'Failed to sign in.');
-//         }
-//       } catch (error) {
-//         console.error('Sign In Error:', error);
-//         toast.error('Failed to sign in.');
-//       }
-//     }
-//   };
-
-//   return (
-//     <div className='signIn-main'>
-//       {/* Sign-in form code remains the same */}
-//     </div>
-//   );
-// };

@@ -8,7 +8,7 @@ body {
 .signUp-main {
   background-color: #ffffff;
   width: 400px;
-  height: 450px;
+  height: 550px;
   margin: 2em auto;
   border-radius: 1.5em;
   box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
@@ -24,7 +24,7 @@ body {
 .post-content {
   width: 400px;
   height: 400px;
-  margin: 3em auto;
+  margin: 1em auto;
 }
 .sign {
   padding-top: 40px;
@@ -34,13 +34,15 @@ body {
   font-size: 23px;
 }
 .sign-up {
-  padding-top: 30px;
+  padding-top: 20px;
   color: #8c55aa;
   font-family: 'Ubuntu', sans-serif;
   font-weight: bold;
   font-size: 23px;
 }
-
+.nav-item:hover {
+  color: #9c27b0;
+}
 .email,
 .password,
 .title,
@@ -59,7 +61,8 @@ body {
   outline: none;
   box-sizing: border-box;
   border: 2px solid rgba(0, 0, 0, 0.02);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   margin-left: 46px;
   text-align: center;
   font-family: 'Ubuntu', sans-serif;
@@ -68,7 +71,7 @@ form .signUp-form {
   padding-top: 5px;
 }
 form.form1 {
-  padding-top: 40px;
+  padding-top: 20px;
 }
 .description {
   width: 76%;
@@ -84,29 +87,11 @@ form.form1 {
   box-sizing: border-box;
   border: 2px solid rgba(0, 0, 0, 0.02);
   margin-left: 46px;
+  margin-top: 10px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-family: 'Ubuntu', sans-serif;
 }
-/* .password,
-.title {
-  width: 76%;
-  color: rgb(38, 50, 56);
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 1px;
-  background: rgba(136, 126, 126, 0.04);
-  padding: 10px 20px;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  box-sizing: border-box;
-  border: 2px solid rgba(0, 0, 0, 0.02);
-  margin-left: 46px;
-  text-align: center;
-  margin-bottom: 20px;
-  font-family: 'Ubuntu', sans-serif;
-} */
 
 .email:focus,
 .password:focus {
@@ -146,7 +131,7 @@ a {
   color: red;
   font-size: 12px;
   text-align: center;
-  margin: 5px;
+  /* margin: 0; */
   padding: 0;
 }
 .footer {
@@ -154,6 +139,7 @@ a {
   padding: 1em;
   cursor: pointer;
 }
+
 .nav-brand {
   font-weight: bold;
   font-size: 1.3em;
@@ -166,4 +152,47 @@ a {
   display: flex;
   justify-content: space-around;
   gap: 4;
+}
+
+.post-img {
+  height: 20em;
+  width: 30em;
+  margin-left: 2.5em;
+  border-radius: 2px;
+}
+.post-feed {
+  background-color: #ffffff;
+  width: 560px;
+  height: 550px;
+  margin: 2em auto;
+  border-radius: 1em;
+  box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+.feed-data {
+  list-style: none;
+}
+
+.feed-icons {
+  display: flex;
+  flex-direction: row;
+}
+.profile-img {
+  height: 15em;
+  width: 20em;
+  margin-left: 2.7em;
+  border-radius: 2px;
+}
+.user-profile {
+  text-align: center;
+  padding: 5px;
+  color: #8c55aa;
+  background-color: #ffffff;
+  width: 400px;
+  height: 300px;
+  margin: 2em auto;
+  border-radius: 1.5em;
+  box-shadow: 0px 11px 35px 2px rgba(0, 0, 0, 0.14);
+}
+.radio-button {
+  margin-left: 6.5em;
 }

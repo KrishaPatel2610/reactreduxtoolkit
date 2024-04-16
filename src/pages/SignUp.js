@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSignUpMutation } from '../services/api';
+import { useGetAllUsersQuery, useSignUpMutation } from '../services/userApi';
+import { Link } from 'react-router-dom';
 
 function SignUp() {
   const navigate = useNavigate();
-
+  let all_username = [];
+  let all_emails = [];
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -16,8 +18,6 @@ function SignUp() {
     password: '',
   });
 
-  const [signUp, { isLoading }] = useSignUpMutation();
-
   const [error, setError] = useState({
     firstNameError: '',
     lastNameError: '',
@@ -25,6 +25,8 @@ function SignUp() {
     userNameError: '',
     passwordError: '',
   });
+  const [signUp, { isLoading }] = useSignUpMutation();
+  const { data: users } = useGetAllUsersQuery();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -135,33 +137,56 @@ function SignUp() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    const isFormValid =
-      validateEmail() &&
-      validatePassword() &&
-      validateUserName() &&
-      validateFirstName() &&
-      validateLastName();
 
-    if (isFormValid) {
-      try {
-        const userCredentials = { ...formData };
+    const isEmailValid = validateEmail();
+    const isUserNameValid = validateUserName();
+    const isPasswordValid = validatePassword();
+    const isFirstNameValid = validateFirstName();
+    const isLastNameValid = validateLastName();
 
-        console.log('User credential : ', userCredentials);
+    users.data.forEach((element) => {
+      all_username.push(element.username);
+      all_emails.push(element.email);
+    });
 
-        const dataToSend = {
-          ...userCredentials,
-          isPrivate: true,
-        };
-        console.log('Data', dataToSend);
-        const result = await signUp(dataToSend);
-        console.log('Mil jaa yaar', result);
-        toast.success('User registered successfully!');
-        navigate('/sign-in');
-      } catch (error) {
-        console.error('Signup Error:', error);
-        const errorMessage =
-          error?.data?.message || error?.error || 'Failed to register user.';
-        toast.error(errorMessage);
+    let isEmailVerify = true;
+    let isUserNameVerify = true;
+    if (
+      isEmailValid &&
+      isFirstNameValid &&
+      isLastNameValid &&
+      isUserNameValid &&
+      isPasswordValid
+    ) {
+      all_username.forEach((user) => {
+        if (formData.username === user) {
+          toast.error('Username already taken.');
+          isUserNameVerify = false;
+        }
+      });
+
+      all_emails.forEach((item) => {
+        if (item === formData.email) {
+          toast.error('Email already exists.');
+          isEmailVerify = false;
+        }
+      });
+      if (isEmailVerify && isUserNameVerify) {
+        try {
+          const userCredentials = { ...formData };
+          const dataToSend = {
+            ...userCredentials,
+            isPrivate: true,
+          };
+
+          await signUp(dataToSend);
+          toast.success('User registered successfully!');
+          navigate('/sign-in');
+        } catch (error) {
+          const errorMessage =
+            error?.data?.message || error?.error || 'Failed to register user.';
+          toast.error(errorMessage);
+        }
       }
     }
   };
@@ -223,6 +248,10 @@ function SignUp() {
         <button className='submit' disabled={isLoading}>
           {isLoading ? 'Registering...' : 'Register'}
         </button>
+
+        <Link to='/sign-in' className='footer'>
+          <p style={{ textAlign: 'center' }}> Already a member?Login</p>
+        </Link>
       </form>
     </div>
   );
